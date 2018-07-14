@@ -13,3 +13,16 @@ export enum IntentTypes {
 
     HelloWorld = "HelloWorldIntent",
 }
+
+export enum ErrorTypes {
+    Unknown = "UnknownError",
+}
+
+export enum Strings {
+    SKILL_NAME = "SKILL_NAME",
+    WELCOME_MSG = "WELCOME_MSG",
+    GOODBYE_MSG = "GOODBYE_MSG",
+    HELLO_MSG = "HELLO_MSG",
+    HELP_MSG = "HELP_MSG",
+    ERROR_MSG = "ERROR_MSG",
+}

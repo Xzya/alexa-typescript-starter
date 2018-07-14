@@ -2,6 +2,8 @@ import { RequestInterceptor } from "ask-sdk-core";
 import * as i18n from "i18next";
 import * as sprintf from "i18next-sprintf-postprocessor";
 import { strings } from "../lib/strings";
+import { RequestAttributes } from "../interfaces";
+import { Random } from "../lib/helpers";
 
 type TranslationFunction = (...args: any[]) => string;
 
@@ -14,9 +16,14 @@ export const Localization: RequestInterceptor = {
             returnObjects: true,
         });
 
-        const attributes = handlerInput.attributesManager.getRequestAttributes();
+        const attributes = handlerInput.attributesManager.getRequestAttributes() as RequestAttributes;
         attributes.t = function (...args: any[]) {
             return (localizationClient.t as TranslationFunction)(...args);
+        };
+        attributes.tr = function (key: any) {
+            const result = localizationClient.t(key) as string[];
+
+            return Random(result);
         };
     },
 };

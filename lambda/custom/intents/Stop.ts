@@ -1,5 +1,5 @@
 import { RequestHandler } from "ask-sdk-core";
-import { IntentTypes } from "../lib/constants";
+import { IntentTypes, Strings } from "../lib/constants";
 import { IsIntent, GetRequestAttributes } from "../lib/helpers";
 
 export const Stop: RequestHandler = {
@@ -9,11 +9,11 @@ export const Stop: RequestHandler = {
     handle(handlerInput) {
         const { t } = GetRequestAttributes(handlerInput);
 
-        const speechText = t("GOODBYE_MSG");
+        const speechText = t(Strings.GOODBYE_MSG);
 
         return handlerInput.responseBuilder
             .speak(speechText)
-            .withSimpleCard(t("SKILL_NAME"), speechText)
+            .withSimpleCard(t(Strings.SKILL_NAME), speechText)
             .getResponse();
     }
 };

@@ -1,5 +1,6 @@
 import { ErrorHandler } from "ask-sdk-core";
 import { GetRequestAttributes } from "../lib/helpers";
+import { Strings } from "../lib/constants";
 
 export const Unknown: ErrorHandler = {
     canHandle() {
@@ -10,7 +11,7 @@ export const Unknown: ErrorHandler = {
 
         const { t } = GetRequestAttributes(handlerInput);
 
-        const speechText = t("ERROR_MSG");
+        const speechText = t(Strings.ERROR_MSG);
 
         return handlerInput.responseBuilder
             .speak(speechText)

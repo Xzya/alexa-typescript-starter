@@ -1,7 +1,7 @@
 import { HandlerInput } from "ask-sdk-core";
 import { IntentRequest } from "ask-sdk-model";
 import { RequestAttributes, Slots, SlotValues, SessionAttributes } from "../interfaces";
-import { RequestTypes } from "./constants";
+import { RequestTypes, ErrorTypes } from "./constants";
 
 /**
  * Checks if the request matches any of the given intents.
@@ -247,4 +247,29 @@ export function GetSlotValues(filledSlots?: Slots): SlotValues {
  */
 export function Interject(str: string): string {
     return `<say-as interpret-as="interjection">${str}</say-as>`;
+}
+
+/**
+ * Creates an error with the given message and type.
+ * 
+ * @param msg 
+ * @param type 
+ */
+export function CreateError(
+    msg: string = "Something unexpected happened.",
+    type: string = ErrorTypes.Unknown
+): Error {
+    const error = new Error(msg);
+    error.name = type;
+
+    return error;
+}
+
+/**
+ * Selects a random element from the array;
+ * 
+ * @param arr 
+ */
+export function Random<T>(arr: T[]): T {
+    return arr[Math.floor(Math.random() * arr.length)];
 }
