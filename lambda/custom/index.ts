@@ -19,6 +19,12 @@ export const handler = Alexa.SkillBuilders.custom()
         // Hello intents
         HelloIntents.HelloWorld
     )
-    .addErrorHandlers(Errors.Unknown)
-    .addRequestInterceptors(Interceptors.Localization)
+    .addErrorHandlers(
+        Errors.Unknown,
+        Errors.Unexpected
+    )
+    .addRequestInterceptors(
+        Interceptors.Localization,
+        Interceptors.Slots
+    )
     .lambda();

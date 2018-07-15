@@ -19,6 +19,11 @@ export interface RequestAttributes {
      */
     tr(key: string): string;
 
+    /**
+     * The slot values for the current request.
+     */
+    slots: SlotValues;
+
     [key: string]: any;
 }
 

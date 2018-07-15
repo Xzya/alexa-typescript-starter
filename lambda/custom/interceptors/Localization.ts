@@ -7,6 +7,9 @@ import { Random } from "../lib/helpers";
 
 type TranslationFunction = (...args: any[]) => string;
 
+/**
+ * Adds translation functions to the RequestAttributes.
+ */
 export const Localization: RequestInterceptor = {
     process(handlerInput) {
         const localizationClient = i18n.use(sprintf).init({

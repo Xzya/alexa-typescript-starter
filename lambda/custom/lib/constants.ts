@@ -16,6 +16,7 @@ export enum IntentTypes {
 
 export enum ErrorTypes {
     Unknown = "UnknownError",
+    Unexpected = "UnexpectedError",
 }
 
 export enum Strings {
@@ -25,4 +26,5 @@ export enum Strings {
     HELLO_MSG = "HELLO_MSG",
     HELP_MSG = "HELP_MSG",
     ERROR_MSG = "ERROR_MSG",
+    ERROR_UNEXPECTED_MSG = "ERROR_UNEXPECTED_MSG",
 }

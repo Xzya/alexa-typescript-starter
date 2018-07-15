@@ -8,6 +8,7 @@ interface IStrings {
     [Strings.HELLO_MSG]: string;
     [Strings.HELP_MSG]: string;
     [Strings.ERROR_MSG]: string;
+    [Strings.ERROR_UNEXPECTED_MSG]: string;
 }
 
 export const strings: Resource = {
@@ -19,6 +20,7 @@ export const strings: Resource = {
             HELLO_MSG: "Hello world!",
             HELP_MSG: "You can say hello to me!",
             ERROR_MSG: "Sorry, I can't understand the command. Please say again.",
+            ERROR_UNEXPECTED_MSG: "Sorry, an unexpected error has occured. Please try again later.",
         } as IStrings,
     },
 };
