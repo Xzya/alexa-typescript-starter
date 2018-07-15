@@ -2,7 +2,63 @@
 
 This is a simple starter project for Alexa skills using Typescript.
 
-Supports text localizations and contains a few helper functions to get you started!
+## What is included in the project
+
+- Default request handlers
+
+| Name |
+| --- |
+| `LaunchRequest` |
+| `SessionEndedRequest` |
+| `System.ExceptionEncountered` |
+| `AMAZON.HelpIntent` |
+| `AMAZON.StopIntent` and `AMAZON.CancelIntent` |
+| `AMAZON.FallbackIntent` |
+
+- Extra handlers
+
+| Name | Description |
+| --- | --- |
+| `HelloWorld` | Triggered when the user says "hello", will answer back with "hello". |
+| `Debug` | Can be placed at the beginning of the request handlers stack and it will print the `handlerInput`. Useful for debugging. |
+
+- Error handlers
+
+| Name | Description |
+| --- | --- |
+| `Unexpected` | Catches `ErrorTypes.Unexpected`, which should be thrown when...something unexpected happens. It will tell the user something unexpected happend, and to try again later. |
+| `Unknown` | Catches all other errors. It will tell the user it didn't understand the command, and to try saying it again (doesn't end session). |
+
+- Request interceptors
+
+| Name | Description |
+| --- | --- |
+| `Localization` | Adds `i18next` localization functions to the `RequestAttributes`. |
+| `Slots` | Parses the slot values, adds additional useful information to them (e.g. if it was an exact match, or if it's ambiguous etc.), and adds them to the `RequestAttributes`. Check the `GetSlotValues` function inside `lambda/custom/lib/helpers.ts` for more details. |
+
+- Localization strings
+
+Check `lambda/custom/lib/strings.ts`.
+
+- Constants
+
+Including the String keys, so you can have type safety everywhere.
+
+Check `lambda/custom/lib/constants.ts`.
+
+- Helper functions
+
+Many helper functions which should reduce code duplication, and reduce the code needed to do common tasks.
+
+Check `lambda/custom/lib/helpers.ts`.
+
+- Local development
+
+Contains an `http` server using `express`, which you can use with `ngrok` or `servo.net` during local development. Check the [Local development section below](#local-development) for more details.
+
+- Scripts
+
+There are a few scripts inside `package.json` for building and deploying your lambda function using the `ask-cli`. Check the [Developer tasks section below](#developer-tasks) for more details.
 
 ## Pre-requisites
 
