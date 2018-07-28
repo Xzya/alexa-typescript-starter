@@ -1,5 +1,5 @@
 import { Resource } from "i18next";
-import { Strings } from "./constants";
+import { Strings, LocaleTypes } from "./constants";
 
 interface IStrings {
     [Strings.SKILL_NAME]: string;
@@ -12,7 +12,7 @@ interface IStrings {
 }
 
 export const strings: Resource = {
-    "en-US": {
+    [LocaleTypes.enUS]: {
         translation: {
             SKILL_NAME: "Hello world",
             WELCOME_MSG: "Welcome to the Alexa Skills Kit, you can say hello!",

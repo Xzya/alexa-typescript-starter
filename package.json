@@ -9,7 +9,25 @@
     "deploy": "npm run build && ask deploy",
     "deploy:lambda": "npm run build && ask deploy --target lambda",
     "deploy:local": "ask deploy --target skill --profile local",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "start": "nodemon"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "testMatch": [
+      "**/*.spec.ts"
+    ],
+    "coverageDirectory": ".coverage"
   },
   "author": "Mihail Cristian Dumitru",
   "license": "MIT",
@@ -24,12 +42,15 @@
     "@types/express": "^4.16.0",
     "@types/i18next": "^8.4.3",
     "@types/i18next-sprintf-postprocessor": "^0.0.29",
+    "@types/jest": "^23.3.0",
     "express": "^4.16.3",
     "gulp": "^3.9.1",
     "gulp-typescript": "^4.0.1",
     "rimraf": "^2.6.2",
     "ts-node": "^5.0.1",
     "typescript": "^2.9.2",
-    "nodemon": "^1.17.5"
+    "nodemon": "^1.17.5",
+    "jest": "^23.4.1",
+    "ts-jest": "^23.0.1"
   }
 }

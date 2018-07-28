@@ -19,6 +19,19 @@ export enum ErrorTypes {
     Unexpected = "UnexpectedError",
 }
 
+export enum LocaleTypes {
+    deDE = "de-DE",
+    enAU = "en-AU",
+    enCA = "en-CA",
+    enGB = "en-GB",
+    enIN = "en-IN",
+    enUS = "en-US",
+    esES = "es-ES",
+    frFR = "fr-FR",
+    itIT = "it-IT",
+    jaJP = "ja-JP",
+}
+
 export enum Strings {
     SKILL_NAME = "SKILL_NAME",
     WELCOME_MSG = "WELCOME_MSG",
