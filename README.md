@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/Xzya/alexa-typescript-starter.svg?branch=master)](https://travis-ci.org/Xzya/alexa-typescript-starter)
+[![codecov](https://codecov.io/gh/Xzya/alexa-typescript-starter/branch/master/graph/badge.svg)](https://codecov.io/gh/Xzya/alexa-typescript-starter)
+
 # Alexa Skill starter project using AWS Lambda and Typescript
 
 This is a simple starter project for Alexa skills using Typescript.
@@ -59,6 +62,28 @@ Contains an `http` server using `express`, which you can use with `ngrok` or `se
 - Scripts
 
 There are a few scripts inside `package.json` for building and deploying your lambda function using the `ask-cli`. Check the [Developer tasks section below](#developer-tasks) for more details.
+
+- Tests
+
+The project contains automated tests using [jest](https://jestjs.io/). Check the `__tests__` folder.
+
+```bash
+$ npm run test
+```
+
+If you want to include code coverage, run
+
+```bash
+$ npm run test:coverage
+```
+
+You can also start `jest` in watch mode:
+
+```bash
+$ npm run test:watch
+```
+
+- Travis CI and Codecov integrations
 
 ## Pre-requisites
 
