@@ -1,4 +1,5 @@
 # Build directories
+.history
 dist
 .coverage
 

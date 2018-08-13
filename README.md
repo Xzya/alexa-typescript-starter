@@ -207,7 +207,7 @@ Taken from [the official hello world project](https://github.com/alexa/skill-sam
 4. Remember to re-deploy your skill and Lambda function for your changes to take effect.
 
 	```bash
-	$ ask deploy
+	$ npm run deploy
 	```
 
 ## License
