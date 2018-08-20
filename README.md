@@ -63,9 +63,9 @@ Contains an `http` server using `express`, which you can use with `ngrok` or `se
 
 There are a few scripts inside `package.json` for building and deploying your lambda function using the `ask-cli`. Check the [Developer tasks section below](#developer-tasks) for more details.
 
-- Tests
+## Tests
 
-The project contains automated tests using [jest](https://jestjs.io/). Check the `__tests__` folder.
+The project uses [Brian MacIntosh's Alexa Skill Test Framework](https://github.com/BrianMacIntosh/alexa-skill-test-framework) and Mocha for testing. The tests are under the `test` folder. It also uses [Instanbul/nyc](https://github.com/istanbuljs/nyc) for code coverage.
 
 ```bash
 $ npm run test
@@ -77,7 +77,7 @@ If you want to include code coverage, run
 $ npm run test:coverage
 ```
 
-You can also start `jest` in watch mode:
+You can also start `mocha` in watch mode:
 
 ```bash
 $ npm run test:watch
