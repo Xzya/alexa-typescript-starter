@@ -44,7 +44,7 @@
     "@types/i18next-sprintf-postprocessor": "^0.0.29",
     "@types/jest": "^23.3.0",
     "express": "^4.16.3",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
     "gulp-typescript": "^4.0.1",
     "rimraf": "^2.6.2",
     "ts-node": "^5.0.1",
