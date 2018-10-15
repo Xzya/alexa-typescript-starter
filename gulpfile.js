@@ -17,4 +17,4 @@ gulp.task("json", function () {
     return gulp.src(IN_DIR + "/**/*.json").pipe(gulp.dest(OUT_DIR));
 });
 
-gulp.task("default", ["compile", "json"]);
+gulp.task("default", gulp.parallel(["compile", "json"]));
