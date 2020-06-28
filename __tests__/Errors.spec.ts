@@ -1,12 +1,22 @@
-import { skill, ssml, RequestWithIntent } from "./helpers";
-import { IntentTypes, LocaleTypes } from "../lambda/custom/lib/constants";
+import { Strings } from '../lambda/custom/lib/constants';
+import { getLocalePath } from '../lambda/custom/locales/locale';
+import { helpers } from './helpers';
+import { IntentRequestBuilder } from './helpers/IntentRequestBuilder';
+import { requestFactory } from './helpers/RequestFactory';
+import { responseBuilder } from './helpers/ResponseBuilder';
 
-describe("Errors", () => {
-    it("Unknown", async () => {
-        const response = await skill(RequestWithIntent({
-            name: "Intent" as IntentTypes,
-            locale: LocaleTypes.enUS,
-        }));
-        expect(response).toMatchObject(ssml(/Sorry, I can't understand the command/gi));
+helpers.setConfigurationsAndRunPipeline({
+    resource: getLocalePath()
+}, locale => {
+    describe("Errors", () => {
+        it("Unknown", async () => {
+            const matcher = responseBuilder().addResponse(Strings.ERROR_MSG).addReprompt(Strings.ERROR_MSG);
+
+            const request = requestFactory().createRequest(IntentRequestBuilder, locale);
+
+            const response = await helpers.skill(request.getRequest());
+
+            expect(response).toMatchObject(matcher.getResponse());
+        });
     });
-});
+})

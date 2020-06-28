@@ -1,6 +1,6 @@
 import { ErrorHandler } from "ask-sdk-core";
-import { GetRequestAttributes } from "../lib/helpers";
 import { Strings } from "../lib/constants";
+import { skillHelpers } from '../lib/helpers';
 
 /**
  * Handles unknown errors. Should be placed at the end, as it will catch
@@ -13,7 +13,7 @@ export const Unknown: ErrorHandler = {
     handle(handlerInput, error) {
         console.log(`Error handled: ${error.message}`);
 
-        const { t } = GetRequestAttributes(handlerInput);
+        const { t } = skillHelpers.getRequestAttributes(handlerInput);
 
         const speechText = t(Strings.ERROR_MSG);
 

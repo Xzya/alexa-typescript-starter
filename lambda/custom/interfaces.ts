@@ -17,7 +17,7 @@ export interface RequestAttributes {
      * 
      * @param key 
      */
-    tr(key: string): string;
+    tr(key: string, ...args: any[]): string;
 
     /**
      * The slot values for the current request.
@@ -51,16 +51,6 @@ export interface MatchedSlotValue {
      * `statis.code` = "ER_SUCCESS_MATCH"
      */
     isMatch: true;
-
-    /**
-     * The first resolved value.
-     */
-    resolved: string;
-
-    /**
-     * The first resolved id.
-     */
-    id: string;
 
     /**
      * `True` if there are multiple resolved values.

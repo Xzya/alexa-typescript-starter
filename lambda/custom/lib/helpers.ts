@@ -1,7 +1,8 @@
-import { HandlerInput } from "ask-sdk-core";
-import { IntentRequest, services } from "ask-sdk-model";
+import { HandlerInput, getRequestType, getIntentName, getDialogState } from "ask-sdk-core";
+import { IntentRequest, services, DialogState } from "ask-sdk-model";
 import { RequestAttributes, Slots, SlotValues, SessionAttributes } from "../interfaces";
-import { RequestTypes, ErrorTypes } from "./constants";
+import { RequestTypes } from "./constants";
+import _ = require("lodash");
 
 /**
  * Checks if the request matches any of the given intents.
@@ -9,15 +10,11 @@ import { RequestTypes, ErrorTypes } from "./constants";
  * @param handlerInput 
  * @param intents 
  */
-export function IsIntent(handlerInput: HandlerInput, ...intents: string[]): boolean {
-    if (handlerInput.requestEnvelope.request.type === RequestTypes.Intent) {
-        for (let i = 0; i < intents.length; i++) {
-            if (handlerInput.requestEnvelope.request.intent.name === intents[i]) {
-                return true;
-            }
-        }
+function isIntent(handlerInput: HandlerInput, ...intents: string[]): boolean {
+    if (!skillHelpers.isType(handlerInput, RequestTypes.Intent)) {
+        return false
     }
-    return false;
+    return _.some(intents, intent => getIntentName(handlerInput.requestEnvelope) === intent);
 }
 
 /**
@@ -26,13 +23,8 @@ export function IsIntent(handlerInput: HandlerInput, ...intents: string[]): bool
  * @param handlerInput 
  * @param types 
  */
-export function IsType(handlerInput: HandlerInput, ...types: string[]): boolean {
-    for (let i = 0; i < types.length; i++) {
-        if (handlerInput.requestEnvelope.request.type === types[i]) {
-            return true;
-        }
-    }
-    return false;
+function isType(handlerInput: HandlerInput, ...types: string[]): boolean {
+    return _.some(types, type => getRequestType(handlerInput.requestEnvelope) === type);
 }
 
 /**
@@ -42,32 +34,8 @@ export function IsType(handlerInput: HandlerInput, ...types: string[]): boolean 
  * @param intent 
  * @param state 
  */
-export function IsIntentWithDialogState(handlerInput: HandlerInput, intent: string, state: string): boolean {
-    return handlerInput.requestEnvelope.request.type === RequestTypes.Intent
-        && handlerInput.requestEnvelope.request.intent.name === intent
-        && handlerInput.requestEnvelope.request.dialogState === state;
-}
-
-/**
- * Checks if the request matches the given intent with a non COMPLETED dialogState.
- * 
- * @param handlerInput 
- * @param intent 
- */
-export function IsIntentWithIncompleteDialog(handlerInput: HandlerInput, intent: string): boolean {
-    return handlerInput.requestEnvelope.request.type === RequestTypes.Intent
-        && handlerInput.requestEnvelope.request.intent.name === intent
-        && handlerInput.requestEnvelope.request.dialogState !== "COMPLETED";
-}
-
-/**
- * Checks if the request matches the given intent with the COMPLETED dialogState.
- * 
- * @param handlerInput 
- * @param intent 
- */
-export function IsIntentWithCompleteDialog(handlerInput: HandlerInput, intent: string): boolean {
-    return IsIntentWithDialogState(handlerInput, intent, "COMPLETED");
+function isIntentWithDialogState(handlerInput: HandlerInput, intent: string, state: DialogState): boolean {
+    return skillHelpers.isIntent(handlerInput, intent) && getDialogState(handlerInput.requestEnvelope) === state;
 }
 
 /**
@@ -75,7 +43,7 @@ export function IsIntentWithCompleteDialog(handlerInput: HandlerInput, intent: s
  * 
  * @param handlerInput 
  */
-export function GetRequestAttributes(handlerInput: HandlerInput): RequestAttributes {
+function getRequestAttributes(handlerInput: HandlerInput): RequestAttributes {
     return handlerInput.attributesManager.getRequestAttributes() as RequestAttributes;
 }
 
@@ -84,8 +52,13 @@ export function GetRequestAttributes(handlerInput: HandlerInput): RequestAttribu
  * 
  * @param handlerInput 
  */
-export function GetSessionAttributes(handlerInput: HandlerInput): SessionAttributes {
+function getSessionAttributes(handlerInput: HandlerInput): SessionAttributes {
     return handlerInput.attributesManager.getSessionAttributes() as SessionAttributes;
+}
+
+function getSessionAttributesByName(handlerInput: HandlerInput, name: string): SessionAttributes {
+    const session = skillHelpers.getSessionAttributes(handlerInput);
+    return !_.isNil(session) && _.has(session, name) && session[name];
 }
 
 /**
@@ -93,47 +66,8 @@ export function GetSessionAttributes(handlerInput: HandlerInput): SessionAttribu
  * 
  * @param handlerInput 
  */
-export function GetDirectiveServiceClient(handlerInput: HandlerInput): services.directive.DirectiveServiceClient {
+function getDirectiveServiceClient(handlerInput: HandlerInput): services.directive.DirectiveServiceClient {
     return handlerInput.serviceClientFactory!.getDirectiveServiceClient();
-}
-
-/**
- * Resets the given slot value by setting it to an empty string.
- * If the intent is using the Dialog Directive, this will cause Alexa
- * to reprompt the user for that slot.
- * 
- * @param request 
- * @param slotName 
- */
-export function ResetSlotValue(request: IntentRequest, slotName: string) {
-    if (request.intent.slots) {
-        const slot = request.intent.slots[slotName];
-        if (slot) {
-            slot.value = "";
-        }
-    }
-}
-
-/**
- * Resets all unmatched slot values by setting them to an empty string.
- * If the intent is using the Dialog Directive, this will cause Alexa
- * to reprompt the user for those slots.
- * 
- * @param request 
- */
-export function ResetUnmatchedSlotValues(handlerInput: HandlerInput, slots: SlotValues) {
-    if (handlerInput.requestEnvelope.request.type === RequestTypes.Intent) {
-        const request = handlerInput.requestEnvelope.request;
-
-        // reset invalid slots
-        Object.keys(slots).forEach((key) => {
-            const slot = slots[key];
-
-            if (slot && !slot.isMatch) {
-                ResetSlotValue(request, slot.name);
-            }
-        });
-    }
 }
 
 /**
@@ -182,73 +116,85 @@ export function ResetUnmatchedSlotValues(handlerInput: HandlerInput, slots: Slot
  * 
  * @param filledSlots 
  */
-export function GetSlotValues(filledSlots?: Slots): SlotValues {
+function getSlotValues(filledSlots: Slots): SlotValues {
     const slotValues: SlotValues = {};
 
-    if (filledSlots) {
-        Object.keys(filledSlots).forEach((item) => {
-            const name = filledSlots[item].name;
-            const value = filledSlots[item].value;
-            const confirmationStatus = filledSlots[item].confirmationStatus;
-
-            if (filledSlots[item] &&
-                filledSlots[item].resolutions &&
-                filledSlots[item].resolutions!.resolutionsPerAuthority &&
-                filledSlots[item].resolutions!.resolutionsPerAuthority![0] &&
-                filledSlots[item].resolutions!.resolutionsPerAuthority![0].status &&
-                filledSlots[item].resolutions!.resolutionsPerAuthority![0].status.code) {
-                switch (filledSlots[item].resolutions!.resolutionsPerAuthority![0].status.code) {
-                    case "ER_SUCCESS_MATCH":
-                        const valueWrappers = filledSlots[item].resolutions!.resolutionsPerAuthority![0].values;
-
-                        if (valueWrappers.length > 1) {
-                            slotValues[name] = {
-                                name: name,
-                                value: value,
-                                isMatch: true,
-                                resolved: valueWrappers[0].value.name,
-                                id: valueWrappers[0].value.id,
-                                isAmbiguous: true,
-                                values: valueWrappers.map((valueWrapper) => valueWrapper.value),
-                                confirmationStatus: confirmationStatus,
-                            };
-                            break;
-                        }
-
-                        slotValues[name] = {
-                            name: name,
-                            value: value,
-                            isMatch: true,
-                            resolved: valueWrappers[0].value.name,
-                            id: valueWrappers[0].value.id,
-                            isAmbiguous: false,
-                            values: [],
-                            confirmationStatus: confirmationStatus,
-                        };
-                        break;
-                    case "ER_SUCCESS_NO_MATCH":
-                        slotValues[name] = {
-                            name: name,
-                            value: value,
-                            isMatch: false,
-                            confirmationStatus: confirmationStatus,
-                        };
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                slotValues[name] = {
-                    name: name,
-                    value: value,
+    _.mapValues(filledSlots, slot => {
+        switch (true) {
+            case _.isNil(slot.resolutions) || _.isEmpty(slot.resolutions):
+                slotValues[slot.name] = {
+                    name: slot.name,
+                    value: slot.value as string,
                     isMatch: false,
-                    confirmationStatus: confirmationStatus,
-                };
+                    confirmationStatus: slot.confirmationStatus
+                }
+                break;
+            default:
+                slot.resolutions?.resolutionsPerAuthority?.map(res => {
+                    switch (res.status.code) {
+                        case 'ER_SUCCESS_MATCH':
+                            slotValues[slot.name] = {
+                                name: slot.name,
+                                value: slot.value as string,
+                                isMatch: true,
+                                isAmbiguous: res.values.length > 1,
+                                values: res.values.map(x => x.value),
+                                confirmationStatus: slot.confirmationStatus
+                            }
+                            break;
+                        case 'ER_SUCCESS_NO_MATCH':
+                            slotValues[slot.name] = {
+                                name: slot.name,
+                                value: slot.value as string,
+                                isMatch: false,
+                                confirmationStatus: slot.confirmationStatus
+                            }
+                            break;
+                    }
+                });
+                break;
+        }
+    });
+    return slotValues;
+}
+
+/**
+ * Resets the given slot value by setting it to an empty string.
+ * If the intent is using the Dialog Directive, this will cause Alexa
+ * to reprompt the user for that slot.
+ * 
+ * @param request 
+ * @param slotName 
+ */
+function resetSlotValue(request: IntentRequest, slotName: string) {
+    if (request.intent.slots) {
+        const slot = request.intent.slots[slotName];
+        if (slot) {
+            slot.value = "";
+        }
+    }
+}
+
+/**
+ * Resets all unmatched slot values by setting them to an empty string.
+ * If the intent is using the Dialog Directive, this will cause Alexa
+ * to reprompt the user for those slots.
+ * 
+ * @param request 
+ */
+function resetUnmatchedSlotValues(handlerInput: HandlerInput, slots: SlotValues) {
+    if (handlerInput.requestEnvelope.request.type === RequestTypes.Intent) {
+        const request = handlerInput.requestEnvelope.request;
+
+        // reset invalid slots
+        Object.keys(slots).forEach((key) => {
+            const slot = slots[key];
+
+            if (slot && !slot.isMatch) {
+                skillHelpers.resetSlotValue(request, slot.name);
             }
         });
     }
-
-    return slotValues;
 }
 
 /**
@@ -256,24 +202,8 @@ export function GetSlotValues(filledSlots?: Slots): SlotValues {
  * 
  * @param str 
  */
-export function Interject(str: string): string {
+function interject(str: string): string {
     return `<say-as interpret-as="interjection">${str}</say-as>`;
-}
-
-/**
- * Creates an error with the given message and type.
- * 
- * @param msg 
- * @param type 
- */
-export function CreateError(
-    msg: string = "Something unexpected happened.",
-    type: string = ErrorTypes.Unknown
-): Error {
-    const error = new Error(msg);
-    error.name = type;
-
-    return error;
 }
 
 /**
@@ -281,7 +211,7 @@ export function CreateError(
  * 
  * @param arr 
  */
-export function Random<T>(arr: T[]): T {
+function random<T>(arr: T[]): T {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
@@ -291,7 +221,7 @@ export function Random<T>(arr: T[]): T {
  * @param handlerInput 
  * @param speech 
  */
-export function VoicePlayerSpeakDirective(handlerInput: HandlerInput, speech?: string): services.directive.SendDirectiveRequest {
+function voicePlayerSpeakDirective(handlerInput: HandlerInput, speech?: string): services.directive.SendDirectiveRequest {
     const requestId = handlerInput.requestEnvelope.request.requestId;
 
     return {
@@ -303,4 +233,20 @@ export function VoicePlayerSpeakDirective(handlerInput: HandlerInput, speech?: s
             requestId,
         },
     };
+}
+
+export const skillHelpers = {
+    isIntent,
+    isType,
+    isIntentWithDialogState,
+    getRequestAttributes,
+    getSessionAttributes,
+    getSessionAttributesByName,
+    getDirectiveServiceClient,
+    getSlotValues,
+    resetSlotValue,
+    resetUnmatchedSlotValues,
+    interject,
+    random,
+    voicePlayerSpeakDirective
 }

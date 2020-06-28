@@ -6,6 +6,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "npm run clean && npm run test:coverage && gulp",
+    "build:v2": "pwsh -NoProfile -ExecutionPolicy Unrestricted -Command ./script/build-to-alexa-deploy.ps1",
     "deploy": "npm run build && ask deploy",
     "deploy:lambda": "npm run build && ask deploy --target lambda",
     "deploy:local": "ask deploy --target skill --profile local",
@@ -27,7 +28,11 @@
     "testMatch": [
       "**/*.spec.ts"
     ],
-    "coverageDirectory": ".coverage"
+    "coverageDirectory": ".coverage",
+    "coveragePathIgnorePatterns": [
+      "/__tests__/*",
+      "lambda/locales/"
+    ]
   },
   "author": "Mihail Cristian Dumitru",
   "license": "MIT",
@@ -35,9 +40,12 @@
     "ask-sdk-core": "^2.8.0",
     "ask-sdk-model": "^1.28.0",
     "i18next": "^19.5.1",
-    "i18next-sprintf-postprocessor": "^0.2.2"
+    "i18next-fs-backend": "^1.0.6",
+    "i18next-sprintf-postprocessor": "^0.2.2",
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.157",
     "@types/node": "^14.0.14",
     "@types/express": "^4.17.6",
     "@types/i18next": "^13.0.0",

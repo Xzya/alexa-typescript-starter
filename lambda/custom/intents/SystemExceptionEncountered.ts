@@ -1,10 +1,10 @@
 import { RequestHandler } from "ask-sdk-core";
 import { RequestTypes } from "../lib/constants";
-import { IsType } from "../lib/helpers";
+import { skillHelpers } from "../lib/helpers";
 
 export const SystemExceptionEncountered: RequestHandler = {
     canHandle(handlerInput) {
-        return IsType(handlerInput, RequestTypes.SystemExceptionEncountered);
+        return skillHelpers.isType(handlerInput, RequestTypes.SystemExceptionEncountered);
     },
     handle(handlerInput) {
         console.log("\n******************* EXCEPTION **********************");

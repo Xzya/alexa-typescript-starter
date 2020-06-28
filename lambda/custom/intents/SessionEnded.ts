@@ -1,13 +1,14 @@
-import { RequestHandler } from "ask-sdk-core";
-import { IsType } from "../lib/helpers";
-import { RequestTypes } from "../lib/constants";
+import { RequestHandler } from 'ask-sdk-core';
+
+import { RequestTypes } from '../lib/constants';
+import { skillHelpers } from '../lib/helpers';
 
 export const SessionEnded: RequestHandler = {
     canHandle(handlerInput) {
-        return IsType(handlerInput, RequestTypes.SessionEnded);
+        return skillHelpers.isType(handlerInput, RequestTypes.SessionEnded);
     },
     handle(handlerInput) {
         //any cleanup logic goes here
-        return handlerInput.responseBuilder.getResponse();
+        return handlerInput.responseBuilder.withShouldEndSession(true).getResponse();
     }
 };
