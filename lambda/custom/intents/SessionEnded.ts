@@ -1,7 +1,6 @@
 import { RequestHandler } from 'ask-sdk-core';
 
-import { RequestTypes } from '../lib/constants';
-import { skillHelpers } from '../lib/helpers';
+import { RequestTypes, skillHelpers } from '../lib';
 
 export const SessionEnded: RequestHandler = {
     canHandle(handlerInput) {

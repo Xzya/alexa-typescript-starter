@@ -1,17 +1,18 @@
-import { ErrorHandler } from "ask-sdk-core";
-import { Strings } from "../lib/constants";
-import { skillHelpers } from '../lib/helpers';
+import { ErrorHandler } from 'ask-sdk-core';
+
+import { logHelpers, skillHelpers, Strings } from '../lib';
+import { ErrorTypes } from '../lib/constants';
 
 /**
  * Handles unknown errors. Should be placed at the end, as it will catch
  * all errors.
  */
 export const Unknown: ErrorHandler = {
-    canHandle() {
-        return true;
+    canHandle(_, error) {
+        return error.name === ErrorTypes.Unknown;
     },
     handle(handlerInput, error) {
-        console.log(`Error handled: ${error.message}`);
+        logHelpers.logError('UNKNOWN ERROR', error)
 
         const { t } = skillHelpers.getRequestAttributes(handlerInput);
 

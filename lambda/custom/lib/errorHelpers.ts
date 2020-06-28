@@ -1,4 +1,4 @@
-import { ErrorTypes } from "./constants";
+import { ErrorTypes } from './constants';
 
 /**
  * Creates an error with the given message and type.
@@ -8,7 +8,7 @@ import { ErrorTypes } from "./constants";
  */
 function createError(
     msg: string = "Something unexpected happened.",
-    type: string = ErrorTypes.Unknown
+    type: ErrorTypes = ErrorTypes.Unknown
 ): Error {
     const error = new Error(msg);
     error.name = type;

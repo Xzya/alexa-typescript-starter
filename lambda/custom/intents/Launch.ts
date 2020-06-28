@@ -1,6 +1,6 @@
-import { RequestHandler } from "ask-sdk-core";
-import { RequestTypes, Strings } from "../lib/constants";
-import { skillHelpers } from "../lib/helpers";
+import { RequestHandler } from 'ask-sdk-core';
+
+import { RequestTypes, skillHelpers, Strings } from '../lib';
 
 export const Launch: RequestHandler = {
     canHandle(handlerInput) {

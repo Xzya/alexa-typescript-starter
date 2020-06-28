@@ -4,6 +4,6 @@ import { logHelpers } from '../lib/logHelpers';
 
 export const LogRequest: RequestInterceptor = {
     process(handlerInput) {
-        logHelpers.logAssert('REQUEST ENVELOPE', handlerInput.requestEnvelope);
+        logHelpers.logInfo('REQUEST ENVELOPE', handlerInput.requestEnvelope);
     },
 };

@@ -2,25 +2,19 @@
 
 $parentFolder = Get-Location | Split-Path -LeafBase
 
-$destPath = "..\dist"
-$sourcePath = "..\" 
+$destPath = ".\dist"
+$sourcePath = ".\" 
 
 if ($parentFolder -eq "script") {
-    $destPath = ".\dist"
-    $sourcePath = ".\"
+    $destPath = "..\dist"
+    $sourcePath = "..\"
 }
+
+Write-Output "DEST PATH  $destPath"
 
 try {
     Write-Output "Starting alexa build pipeline"
     
-    Write-Output "running tests and coverage"
-
-    npm run test:coverage
-
-    if (!$?) {
-        throw "error run tests"
-    }
-
     Write-Output "running build"
 
     npm run build

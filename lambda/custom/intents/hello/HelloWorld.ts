@@ -1,6 +1,6 @@
-import { RequestHandler } from "ask-sdk-core";
-import { IntentTypes, Strings } from "../../lib/constants";
-import { skillHelpers } from '../../lib/helpers';
+import { RequestHandler } from 'ask-sdk-core';
+
+import { IntentTypes, skillHelpers, Strings } from '../../lib';
 
 export const HelloWorld: RequestHandler = {
     canHandle(handlerInput) {
