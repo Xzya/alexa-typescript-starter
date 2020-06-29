@@ -1,8 +1,9 @@
-import * as Alexa from "ask-sdk-core";
-import * as Intents from "./intents";
-import * as Errors from "./errors";
-import * as Interceptors from "./interceptors";
-import * as HelloIntents from "./intents/hello";
+import * as Alexa from 'ask-sdk-core';
+
+import * as Errors from './errors';
+import * as Intents from './intents';
+import * as HelloIntents from './intents/hello';
+import * as Interceptors from './interceptors';
 
 export const handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
@@ -25,6 +26,9 @@ export const handler = Alexa.SkillBuilders.custom()
     )
     .addRequestInterceptors(
         Interceptors.Localization,
-        Interceptors.Slots
+        Interceptors.SlotInterceptor,
+        Interceptors.LogRequest,
+    ).addResponseInterceptors(
+        Interceptors.LogResponse
     )
     .lambda();

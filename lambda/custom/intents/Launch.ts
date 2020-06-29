@@ -1,13 +1,13 @@
-import { RequestHandler } from "ask-sdk-core";
-import { RequestTypes, Strings } from "../lib/constants";
-import { IsType, GetRequestAttributes } from "../lib/helpers";
+import { RequestHandler } from 'ask-sdk-core';
+
+import { RequestTypes, skillHelpers, Strings } from '../lib';
 
 export const Launch: RequestHandler = {
     canHandle(handlerInput) {
-        return IsType(handlerInput, RequestTypes.Launch);
+        return skillHelpers.isType(handlerInput, RequestTypes.Launch);
     },
     handle(handlerInput) {
-        const { t } = GetRequestAttributes(handlerInput);
+        const { t } = skillHelpers.getRequestAttributes(handlerInput);
 
         const speechText = t(Strings.WELCOME_MSG);
 

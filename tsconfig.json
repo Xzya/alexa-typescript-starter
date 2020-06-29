@@ -6,19 +6,20 @@
       "es6"
     ],
     "moduleResolution": "node",
-    "rootDir": "lambda",
+    "rootDir": "lambda/custom",
     "outDir": "dist",
-    "sourceMap": false,
+    "sourceMap": true,
     "allowJs": false,
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noImplicitThis": true,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "noImplicitReturns": true,
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true
+    "strict": true,
+    "esModuleInterop": true
   },
   "exclude": [
     "/**/node_modules",

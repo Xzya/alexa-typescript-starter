@@ -1,36 +1,60 @@
-import { skill, ssml, RequestWithIntent, RequestWithType } from "./helpers";
-import { IntentTypes, LocaleTypes } from "../lambda/custom/lib/constants";
+import { IntentTypes, Strings } from '../lambda/custom/lib/constants';
+import { getLocalePath } from '../lambda/custom/locales/locale';
+import { helpers, IntentRequestBuilder, requestFactory, responseBuilder } from './helpers';
 
-describe("BuiltIn Intents", () => {
-    it("Help", async () => {
-        const response = await skill(RequestWithIntent({
-            name: IntentTypes.Help,
-            locale: LocaleTypes.enUS,
-        }));
-        expect(response).toMatchObject(ssml(/You can say hello/gi));
-    });
+helpers.setConfigurationsAndRunPipeline({ resource: getLocalePath() }, locale => {
+    describe("BuiltIn Intents", () => {
 
-    it("Stop", async () => {
-        const response = await skill(RequestWithIntent({
-            name: IntentTypes.Stop,
-            locale: LocaleTypes.enUS,
-        }));
-        expect(response).toMatchObject(ssml(/Goodbye/gi));
-    });
+        const request = requestFactory().createRequest(IntentRequestBuilder, locale);
 
-    it("Cancel", async () => {
-        const response = await skill(RequestWithIntent({
-            name: IntentTypes.Cancel,
-            locale: LocaleTypes.enUS,
-        }));
-        expect(response).toMatchObject(ssml(/Goodbye/gi));
-    });
+        it("Help", async () => {
 
-    it("Fallback", async () => {
-        const response = await skill(RequestWithIntent({
-            name: IntentTypes.Fallback,
-            locale: LocaleTypes.enUS,
-        }));
-        expect(response).toMatchObject(ssml(/Sorry, I can't understand the command/gi));
+            const response = await helpers.skill(request.addIntent({
+                name: IntentTypes.Help
+            }).getRequest());
+
+            const matcher = responseBuilder()
+                .addResponse(Strings.HELP_MSG)
+                .addReprompt(Strings.HELP_MSG)
+                .addSimpleCard({ key: Strings.SKILL_NAME }, { key: Strings.HELP_MSG });
+
+            expect(response).toMatchObject(matcher.getResponse());
+        });
+
+        it("Stop", async () => {
+            const response = await helpers.skill(request.addIntent({
+                name: IntentTypes.Stop
+            }).getRequest());
+
+            const matcher = responseBuilder()
+                .addResponse(Strings.GOODBYE_MSG)
+                .addSimpleCard({ key: Strings.SKILL_NAME }, { key: Strings.GOODBYE_MSG });
+
+            expect(response).toMatchObject(matcher.getResponse());
+        });
+
+        it("Cancel", async () => {
+            const response = await helpers.skill(request.addIntent({
+                name: IntentTypes.Cancel
+            }).getRequest());
+
+            const matcher = responseBuilder()
+                .addResponse(Strings.GOODBYE_MSG)
+                .addSimpleCard({ key: Strings.SKILL_NAME }, { key: Strings.GOODBYE_MSG });
+
+            expect(response).toMatchObject(matcher.getResponse());
+        });
+
+        it("Fallback", async () => {
+            const response = await helpers.skill(request.addIntent({
+                name: IntentTypes.Fallback
+            }).getRequest());
+
+            const matcher = responseBuilder()
+                .addResponse(Strings.ERROR_MSG)
+                .addReprompt(Strings.HELP_MSG)
+
+            expect(response).toMatchObject(matcher.getResponse());
+        });
     });
 });
