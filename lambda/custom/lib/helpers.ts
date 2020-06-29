@@ -1,5 +1,5 @@
 import { getDialogState, getIntentName, getRequestType, HandlerInput } from 'ask-sdk-core';
-import { DialogState, IntentRequest, services } from 'ask-sdk-model';
+import { DialogState, IntentRequest, Request, services } from 'ask-sdk-model';
 import _ = require('lodash');
 
 import { RequestAttributes, SessionAttributes, Slots, SlotValues } from '../interfaces';
@@ -57,6 +57,11 @@ function getSessionAttributes(handlerInput: HandlerInput): SessionAttributes {
     return handlerInput.attributesManager.getSessionAttributes() as SessionAttributes;
 }
 
+/**
+ * Get an attribute by name if exists.
+ * @param handlerInput the handler input
+ * @param name the attribute name
+ */
 function getSessionAttributesByName(handlerInput: HandlerInput, name: string): SessionAttributes {
     const session = skillHelpers.getSessionAttributes(handlerInput);
     return !_.isNil(session) && _.has(session, name) && session[name];
@@ -125,7 +130,7 @@ function getSlotValues(filledSlots: Slots): SlotValues {
             case _.isNil(slot.resolutions) || _.isEmpty(slot.resolutions):
                 slotValues[slot.name] = {
                     name: slot.name,
-                    value: slot.value as string,
+                    value: slot.value ?? '',
                     isMatch: false,
                     confirmationStatus: slot.confirmationStatus
                 }
@@ -136,7 +141,7 @@ function getSlotValues(filledSlots: Slots): SlotValues {
                         case 'ER_SUCCESS_MATCH':
                             slotValues[slot.name] = {
                                 name: slot.name,
-                                value: slot.value as string,
+                                value: slot.value ?? '',
                                 isMatch: true,
                                 isAmbiguous: res.values.length > 1,
                                 values: res.values.map(x => x.value),
@@ -146,7 +151,7 @@ function getSlotValues(filledSlots: Slots): SlotValues {
                         default:
                             slotValues[slot.name] = {
                                 name: slot.name,
-                                value: slot.value as string,
+                                value: slot.value ?? '',
                                 isMatch: false,
                                 confirmationStatus: slot.confirmationStatus
                             }
@@ -159,6 +164,13 @@ function getSlotValues(filledSlots: Slots): SlotValues {
     return slotValues;
 }
 
+/**
+ * Get request envelope as T.
+ * @param handlerInput the handler input
+ */
+function getRequestAs<T extends Request>(handlerInput: HandlerInput): T {
+    return handlerInput.requestEnvelope.request as T;
+}
 /**
  * Resets the given slot value by setting it to an empty string.
  * If the intent is using the Dialog Directive, this will cause Alexa
@@ -184,8 +196,8 @@ function resetSlotValue(request: IntentRequest, slotName: string) {
  * @param request 
  */
 function resetUnmatchedSlotValues(handlerInput: HandlerInput, slots: SlotValues) {
-    if (handlerInput.requestEnvelope.request.type === RequestTypes.Intent) {
-        const request = handlerInput.requestEnvelope.request;
+    if (skillHelpers.isType(handlerInput, RequestTypes.Intent)) {
+        const request = skillHelpers.getRequestAs<IntentRequest>(handlerInput);
 
         // reset invalid slots
         Object.keys(slots).forEach((key) => {
@@ -245,6 +257,7 @@ export const skillHelpers = {
     getSessionAttributesByName,
     getDirectiveServiceClient,
     getSlotValues,
+    getRequestAs,
     resetSlotValue,
     resetUnmatchedSlotValues,
     interject,

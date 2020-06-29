@@ -17,7 +17,7 @@ export class LaunchRequestBuilder extends BaseRequestBuilder<LaunchRequestBuilde
     }
 
     public addTask(task: Task): LaunchRequestBuilder {
-        this.getRequestByType<LaunchRequest>().task = task;
+        this.as<LaunchRequest>().task = task;
         return this;
     }
 }

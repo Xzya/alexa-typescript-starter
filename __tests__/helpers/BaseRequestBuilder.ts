@@ -1,4 +1,4 @@
-import { RequestEnvelope, Request } from 'ask-sdk-model';
+import { Request, RequestEnvelope } from 'ask-sdk-model';
 import _ from 'lodash';
 
 /**
@@ -41,13 +41,16 @@ export class BaseRequestBuilder<T extends BaseRequestBuilder<T>> {
     }
 
     /**
-     * Get
+     * Get the request envelope.
      */
     public getRequest(): RequestEnvelope {
         return this.request;
     }
 
-    protected getRequestByType<R extends Request>(): R {
+    /**
+     * Convert the request to type R.
+     */
+    protected as<R extends Request>(): R {
         return this.request?.request as unknown as R;
     }
 }

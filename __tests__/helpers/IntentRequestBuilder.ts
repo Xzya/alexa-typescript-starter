@@ -30,7 +30,7 @@ export class IntentRequestBuilder extends BaseRequestBuilder<IntentRequestBuilde
         name: string,
         confirmationStatus?: IntentConfirmationStatus
     }): IntentRequestBuilder {
-        this.getRequestByType<IntentRequest>().intent = helpers.partial<Intent>({
+        this.as<IntentRequest>().intent = helpers.partial<Intent>({
             name: intent.name,
             confirmationStatus: intent.confirmationStatus ?? "NONE"
         });
@@ -51,7 +51,7 @@ export class IntentRequestBuilder extends BaseRequestBuilder<IntentRequestBuilde
         }
     }): IntentRequestBuilder {
         _.mapKeys(slot, (val, key) => {
-            this.getRequestByType<IntentRequest>().intent.slots[key] = helpers.partial<Slot>({
+            this.as<IntentRequest>().intent.slots[key] = helpers.partial<Slot>({
                 confirmationStatus: val.confirmationStatus ?? 'NONE',
                 name: key,
                 value: val.value,

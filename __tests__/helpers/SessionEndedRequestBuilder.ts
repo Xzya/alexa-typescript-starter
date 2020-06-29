@@ -18,12 +18,12 @@ export class SessionEndedRequestBuilder extends BaseRequestBuilder<SessionEndedR
     }
 
     public addError(error: SessionEndedError): SessionEndedRequestBuilder {
-        this.getRequestByType<SessionEndedRequest>().error = error;
+        this.as<SessionEndedRequest>().error = error;
         return this;
     }
 
     public addReason(reason: SessionEndedReason): SessionEndedRequestBuilder {
-        this.getRequestByType<SessionEndedRequest>().reason = reason;
+        this.as<SessionEndedRequest>().reason = reason;
         return this;
     }
 }

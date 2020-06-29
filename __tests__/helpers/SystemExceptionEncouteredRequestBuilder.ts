@@ -18,12 +18,12 @@ export class SystemExceptionEncounteredRequestBuilder extends BaseRequestBuilder
     }
 
     public addError(error: interfaces.system.Error): SystemExceptionEncounteredRequestBuilder {
-        this.getRequestByType<interfaces.system.ExceptionEncounteredRequest>().error = error;
+        this.as<interfaces.system.ExceptionEncounteredRequest>().error = error;
         return this;
     }
 
     public addCause(cause: interfaces.system.ErrorCause): SystemExceptionEncounteredRequestBuilder {
-        this.getRequestByType<interfaces.system.ExceptionEncounteredRequest>().cause = cause;
+        this.as<interfaces.system.ExceptionEncounteredRequest>().cause = cause;
         return this;
     }
 }
