@@ -27,10 +27,11 @@ gulp.task("json", function ()
         .src(IN_DIR + "/**/*.json")
         .pipe(rename(function (path)
         {
-            path.dirname = path.dirname.replace('/custom', '');
+            path.dirname = path.dirname.replace('custom', '');
         }))
         .pipe(gulp.dest(OUT_DIR));
 });
+
 
 gulp.task("package", () =>
 {
