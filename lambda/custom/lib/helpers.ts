@@ -1,8 +1,9 @@
-import { HandlerInput, getRequestType, getIntentName, getDialogState } from "ask-sdk-core";
-import { IntentRequest, services, DialogState } from "ask-sdk-model";
-import { RequestAttributes, Slots, SlotValues, SessionAttributes } from "../interfaces";
-import { RequestTypes } from "./constants";
-import _ = require("lodash");
+import { getDialogState, getIntentName, getRequestType, HandlerInput } from 'ask-sdk-core';
+import { DialogState, IntentRequest, services } from 'ask-sdk-model';
+import _ = require('lodash');
+
+import { RequestAttributes, SessionAttributes, Slots, SlotValues } from '../interfaces';
+import { RequestTypes } from './constants';
 
 /**
  * Checks if the request matches any of the given intents.
@@ -142,7 +143,7 @@ function getSlotValues(filledSlots: Slots): SlotValues {
                                 confirmationStatus: slot.confirmationStatus
                             }
                             break;
-                        case 'ER_SUCCESS_NO_MATCH':
+                        default:
                             slotValues[slot.name] = {
                                 name: slot.name,
                                 value: slot.value as string,
