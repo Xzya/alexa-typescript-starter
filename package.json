@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "npm run clean && gulp",
-    "deploy": "npm run build && ask deploy",
+    "deploy": "npm run build && npm run test:coverage && ask deploy",
     "deploy:lambda": "npm run build && ask deploy --target lambda",
     "deploy:local": "ask deploy --target skill --profile local",
     "test": "jest",
