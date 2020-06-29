@@ -6,7 +6,6 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "npm run clean && npm run test:coverage && gulp",
-    "build:v2": "pwsh -NoProfile -ExecutionPolicy Unrestricted -Command ./script/build-to-alexa-deploy.ps1",
     "deploy": "npm run build && ask deploy",
     "deploy:lambda": "npm run build && ask deploy --target lambda",
     "deploy:local": "ask deploy --target skill --profile local",
@@ -47,6 +46,8 @@
     "lodash": "^4.17.15"
   },
   "devDependencies": {
+    "gulp-rename": "^2.0.0",
+    "event-stream": "^4.0.1",
     "@types/lodash": "^4.14.157",
     "@types/node": "^14.0.14",
     "@types/express": "^4.17.6",

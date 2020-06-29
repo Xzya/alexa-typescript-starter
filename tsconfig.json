@@ -6,8 +6,8 @@
       "es6"
     ],
     "moduleResolution": "node",
-    "rootDir": "lambda",
-    "outDir": "dist/custom",
+    "rootDir": "lambda/custom",
+    "outDir": "dist",
     "sourceMap": true,
     "allowJs": false,
     "noImplicitAny": true,
