@@ -13,10 +13,6 @@ gulp.task("compile", function ()
     return tsProject.src()
         .pipe(tsProject())
         .js
-        .pipe(rename(function (path)
-        {
-            path.dirname = path.dirname.replace('/custom', '');
-        }))
         .pipe(gulp.dest(OUT_DIR));
 });
 
