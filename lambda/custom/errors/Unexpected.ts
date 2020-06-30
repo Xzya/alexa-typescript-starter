@@ -1,6 +1,6 @@
-import { ErrorHandler } from "ask-sdk-core";
-import { GetRequestAttributes } from "../lib/helpers";
-import { Strings, ErrorTypes } from "../lib/constants";
+import { ErrorHandler } from 'ask-sdk-core';
+
+import { ErrorTypes, logHelpers, skillHelpers, Strings } from '../lib';
 
 /**
  * Handles ErrorTypes.Unexpected errors which should be thrown when something
@@ -11,12 +11,13 @@ export const Unexpected: ErrorHandler = {
         return error.name === ErrorTypes.Unexpected;
     },
     handle(handlerInput, error) {
-        console.log(`Error handled: ${error.message}`);
+        logHelpers.logError('ERROR', error)
 
-        const { t } = GetRequestAttributes(handlerInput);
+        const { t } = skillHelpers.getRequestAttributes(handlerInput);
 
-        return handlerInput.responseBuilder
+        const res = handlerInput.responseBuilder
             .speak(t(Strings.ERROR_UNEXPECTED_MSG))
             .getResponse();
+        return res;
     },
 };

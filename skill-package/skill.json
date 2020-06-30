@@ -1,0 +1,99 @@
+{
+    "manifest": {
+        "publishingInformation": {
+            "locales": {
+                "en-US": {
+                    "summary": "This is a sample Alexa custom skill.",
+                    "examplePhrases": [
+                        "Alexa, open sample custom skill.",
+                        "Alexa, play sample custom skill."
+                    ],
+                    "keywords": [
+                        "Descriptive_Phrase_1",
+                        "Descriptive_Phrase_2",
+                        "Descriptive_Phrase_3"
+                    ],
+                    "smallIconUri": "https://smallUri.com",
+                    "largeIconUri": "https://largeUri.com",
+                    "name": "Sample custom skill name.",
+                    "description": "This skill does interesting things."
+                }
+            },
+            "isAvailableWorldwide": false,
+            "testingInstructions": "1) Say 'Alexa, hello world'",
+            "category": "HEALTH_AND_FITNESS",
+            "distributionCountries": [
+                "US"
+            ]
+        },
+        "apis": {
+            "custom": {
+                "endpoint": {
+                    "uri": "arn:aws:lambda:us-east-1:040623927470:function:sampleSkill"
+                },
+                "interfaces": [
+                    {
+                        "type": "ALEXA_PRESENTATION_APL"
+                    },
+                    {
+                        "type": "AUDIO_PLAYER"
+                    },
+                    {
+                        "type": "CAN_FULFILL_INTENT_REQUEST"
+                    },
+                    {
+                        "type": "GADGET_CONTROLLER"
+                    },
+                    {
+                        "type": "GAME_ENGINE"
+                    },
+                    {
+                        "type": "RENDER_TEMPLATE"
+                    },
+                    {
+                        "type": "VIDEO_APP"
+                    }
+                ],
+                "regions": {
+                    "NA": {
+                        "endpoint": {
+                            "sslCertificateType": "Trusted",
+                            "uri": "https://customapi.sampleskill.com"
+                        }
+                    }
+                }
+            }
+        },
+        "manifestVersion": "1.0",
+        "permissions": [
+            {
+                "name": "alexa::devices:all:address:full:read"
+            },
+            {
+                "name": "alexa:devices:all:address:country_and_postal_code:read"
+            },
+            {
+                "name": "alexa::household:lists:read"
+            },
+            {
+                "name": "alexa::household:lists:write"
+            },
+            {
+                "name": "alexa::alerts:reminders:skill:readwrite"
+            }
+        ],
+        "privacyAndCompliance": {
+            "allowsPurchases": false,
+            "usesPersonalInfo": false,
+            "isChildDirected": false,
+            "isExportCompliant": true,
+            "containsAds": false,
+            "locales": {
+                "en-US": {
+                    "privacyPolicyUrl": "http://www.myprivacypolicy.sampleskill.com",
+                    "termsOfUseUrl": "http://www.termsofuse.sampleskill.com"
+                }
+            }
+        }
+    }
+}

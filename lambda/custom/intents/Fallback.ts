@@ -1,13 +1,13 @@
-import { RequestHandler } from "ask-sdk-core";
-import { IsIntent, GetRequestAttributes } from "../lib/helpers";
-import { IntentTypes, Strings } from "../lib/constants";
+import { RequestHandler } from 'ask-sdk-core';
+
+import { IntentTypes, skillHelpers, Strings } from '../lib';
 
 export const Fallback: RequestHandler = {
     canHandle(handlerInput) {
-        return IsIntent(handlerInput, IntentTypes.Fallback);
+        return skillHelpers.isIntent(handlerInput, IntentTypes.Fallback);
     },
     handle(handlerInput) {
-        const { t } = GetRequestAttributes(handlerInput);
+        const { t } = skillHelpers.getRequestAttributes(handlerInput);
 
         const speechText = t(Strings.ERROR_MSG);
 
