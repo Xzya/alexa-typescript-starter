@@ -51,7 +51,7 @@ function updatePackage()
         // parse raw json into javscript object
         const parsed = JSON.parse(rawJSON, (key, value) =>
         {
-            if (excludedProp.indexOf(key, 0) < 0) {
+            if (!excludedProp.some(exc => exc === key)) {
                 return value;
             }
         });
